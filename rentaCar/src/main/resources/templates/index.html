@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<title>空車検索</title>
+</head>
+<body>
+<h1>空車検索</h１>
+<div th:if="${error}">
+<p th:text="*{error}"></p>
+</div>
+<div th:object="${session.user}">
+<p th:text="*{userName} + さん"></p>
+</div>
+<form th:action="@{/main}" method="post" class="login-container">
+<input type="datetime-local"　id="departureDateTime" name="departureDateTime" step="3600" onchange="restrictTime(this)" required/>
+<input type="datetime-local" id="returnDateTime" name="returnDateTime" step="3600" onchange="restrictTime(this)" required/>
+<button type="submit">検索</button><br>
+</form>
+</div>
+<a th:href="@{/confirm}">予約確認</a>
+</body>
+</html>
+
+<script>
+function restrictTime(input) {
+ // 選択された日時をDate オブジェクトに変換
+ const selectedTime = new Date(input.value);0
+ // 選択された時間の「時」の部分を取得
+ const hour = selectedTime.getHours();
+ // 選択された時間が9時より前、または17時以降の場合
+ if (hour < 9 || hour > 18) {
+   // アラートを表示して、営業時間内の選択を促す
+   alert("営業時間外です。9:00から18:00の間で選択してください。");
+   // 選択された日時をクリア（空文字列に設定）
+   input.value = "";
+ }
+}
+</script>

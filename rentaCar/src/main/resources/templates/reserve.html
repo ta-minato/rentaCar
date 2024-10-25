@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!--script src="/js/reserve.js" defer></script-->
+<title>予約フォーム</title>
+</head>
+<body>
+<h1>予約フォーム</h1>
+<div th:if="${error}">
+<p th:text="*{error}"></p>
+</div>
+<div th:object="${session.user}">
+<!--p th:text="*{userName}"></p-->
+<form th:action="@{/result}" id="reserve-form" method="post">
+<input type="hidden" name="userId" th:value="*{userId}"/>
+<p th:text="*{userName}"></p>
+</div>
+<div th:object="${session.car}">
+<input type="hidden" name="carId" th:value="*{carId}"/>
+<p th:text="*{carName}"></p>
+</div>
+<div th:object="${session.time}">
+<input type="datetime-local" name="departureDateTime" th:value="*{departureDateTime}"/>
+<input type="datetime-local" name="returnDateTime" th:value="*{returnDateTime}"/>
+</div>
+<button type="submit">予約</button>
+</form>
+<br>
+<a th:href="@{/remain}">車種一覧へ</a>
+</body>
+</html>
+
+<script>
+function restrictTime(input) {
+ // 選択された日時をDate オブジェクトに変換
+ const selectedTime = new Date(input.value);
+ // 選択された時間の「時」の部分を取得
+ const hour = selectedTime.getHours();
+ // 選択された時間が9時より前、または17時以降の場合
+ if (hour < 9 || hour > 18) {
+   // アラートを表示して、営業時間内の選択を促す
+   alert("営業時間外です。9:00から18:00の間で選択してください。");
+   // 選択された日時をクリア（空文字列に設定）
+   input.value = "";
+ }
+}
+</script>
